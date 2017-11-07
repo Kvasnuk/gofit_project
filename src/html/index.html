@@ -1,0 +1,815 @@
+//= ./parts/header.html
+<div class="video__wrapper">
+    <video id="home-page-video" loop autoplay controls>
+        <source src="/assets/media/video/gofit.mp4" type="video/mp4">
+    </video>
+    <canvas id="video__background" class="video__background"></canvas>
+    <canvas id="video__blur"  class="video__blur"></canvas>
+
+    <div class="container video-height">
+        <div class="row">
+            <div class="col-md-12 col-lg-6  video__description">
+                <div><h1 class="video__description_title"><span>508 спортклубов</span> в одном абонементе</h1>
+                    <p class="video__description_excerpt">Начните экономить до 50 грн. на <br/>
+                        каждом занятии прямо сейчас!</p>
+                    <a class="video__play" href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="27"
+                             height="28" viewBox="0 0 27 28">
+                            <defs>
+                                <path id="a" d="M978 430.38l-28 14v-28z"/>
+                            </defs>
+                            <g transform="translate(-950 -416)">
+                                <use fill="#fff" xlink:href="#a"/>
+                            </g>
+                        </svg>
+                    </a>
+                    <a class="video__description_action btn__yellow" href="/subscription.html">Выбрать абонемент</a>
+                </div>
+                <a class="video__scrollTo" href="#"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<section id="map-gyms">
+    <h2>Занятия в клубах <a class="map-city">Киева</a> на любой вкус</h2>
+    <ul class="map-city-list">
+        <li><a href="#">Львов</a></li>
+        <li><a href="#">Харьков</a></li>
+        <li><a href="#">Днепр</a></li>
+    </ul>
+    <div id="map">
+    </div>
+    <script>
+        var gyms = [
+            {
+                lat: 50.447914,
+                lng: 30.622192,
+                title: 'Студия «SELFCENTER',
+                link: "#",
+                rating: 4.4,
+                description: "<p>Кросфит, Бокс, Йога, Батут… и еще 5</p>"
+
+            },
+            {
+                lat: 50.417914,
+                lng: 30.522192,
+                title: 'Banda2',
+                description: "<p>Banda2 text ...</p>",
+                link: "#",
+                rating: 4
+            },
+            {
+                lat: 50.467914,
+                lng: 30.422192,
+                title: 'Banda3',
+                description: "<p>Banda3 text ...</p>",
+                link: "#",
+                rating: 2
+            },
+            {
+                lat: 50.447914,
+                lng: 30.472192,
+                title: 'Banda4',
+                description: "<p>Banda4 text ...</p>",
+                link: "#",
+                rating: 2
+            },
+            {
+                lat: 50.447914,
+                lng: 30.529192,
+                title: 'Banda5',
+                description: "<p>Banda5 text ... </p>",
+                link: "#",
+                rating: 2
+            }
+        ];
+        var gmarkers = [];
+        function initMap() {
+            var image = {
+                url: '/assets/media/img/map-marker.svg',
+            };
+            var imageActive = {
+                url: '/assets/media/img/marker-active.svg',
+            };
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: {lat: 50.447914, lng: 30.522192},
+                styles: [
+                    {
+                        "featureType": "administrative",
+                        "elementType": "labels.text",
+                        "stylers": [
+                            {
+                                "color": "#747e8a"
+                            },
+                            {
+                                "weight": 0.5
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "administrative.land_parcel",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#a9a9a9"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "landscape",
+                        "elementType": "labels.text",
+                        "stylers": [
+                            {
+                                "color": "#ffffff"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "landscape.natural",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#f02424"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi.park",
+                        "elementType": "geometry.fill",
+                        "stylers": [
+                            {
+                                "color": "#c2e6b3"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi.place_of_worship",
+                        "elementType": "geometry.fill",
+                        "stylers": [
+                            {
+                                "weight": 0.5
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.arterial",
+                        "elementType": "geometry.fill",
+                        "stylers": [
+                            {
+                                "color": "#ffffff"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "geometry.fill",
+                        "stylers": [
+                            {
+                                "color": "#bdc3c8"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "geometry.stroke",
+                        "stylers": [
+                            {
+                                "visibility": "off"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#a1a3a3"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway.controlled_access",
+                        "elementType": "geometry.fill",
+                        "stylers": [
+                            {
+                                "color": "#ffffff"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "transit.station",
+                        "stylers": [
+                            {
+                                "visibility": "on"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "transit.station",
+                        "elementType": "labels.icon",
+                        "stylers": [
+                            {
+                                "visibility": "on"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "transit.station",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#a1a3a3"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "water",
+                        "elementType": "geometry.fill",
+                        "stylers": [
+                            {
+                                "color": "#aabdcf"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "water",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#8597a5"
+                            }
+                        ]
+                    }
+                ]
+            });
+            var infowindow = new google.maps.InfoWindow({
+                content: ''
+            });
+            for (var i = 0; i < gyms.length; i++) {
+                var gym = gyms[i];
+                var marker = new google.maps.Marker({
+                    position: {lat: gym.lat, lng: gym.lng},
+                    map: map,
+                    icon: image,
+                    id: 'gym-' + i,
+                    title: gym.title,
+                    description: gym.description,
+                    link: gym.link,
+                    rating: gym.rating,
+                });
+                google.maps.event.addListener(marker, 'click', function () {
+                    infowindow.close();
+                    for (var i = 0; i < gmarkers.length; i++) {
+                        gmarkers[i].setIcon(image);
+                    }
+                    this.setIcon(imageActive);
+                    infowindow.setContent("<div class='class='map-gym__card'><h3 class='map-gym__title' >" + this.title + "</h3> <p class='map-gym__rating'> <span class='rating-star' data-rating='1'></span> <span class='rating-star' data-rating='2'></span> <span class='rating-star' data-rating='3'></span> <span class='rating-star' data-rating='4'></span> <span class='rating-star' data-rating='5'></span> <span class='rating-average'>" + this.rating + "</span> </p> <div class='map-gym__desc'>" + this.description + "</div><a class='map-gym__link' href='" + this.link + "'></a></div>");
+                    infowindow.open(map, this);
+                });
+                google.maps.event.addListener(infowindow, 'closeclick', function () {
+                    for (var i = 0; i < gmarkers.length; i++) {
+                        gmarkers[i].setIcon(image);
+                    }
+                });
+                gmarkers.push(marker);
+            }
+        }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjy7DUsVJZt6vcSDE8f9sHob_Jz3K3YXg&callback=initMap">
+    </script>
+</section>
+<section id="popular-activities">
+    <div class="container">
+        <div class="row">
+            <h4 class="col-12 col-md-8 section__title">Популярные занятия в Киеве</h4>
+            <div class="col-12 col-md-4 section__link">
+                <a class="link-arrow-right" href="#">Показать все занятия</a>
+            </div>
+            <div class="col-12 cards-slider ">
+                <ul id="popular-activities-slider" class="row  slider-loading b-slider-wrapper pl-0">
+                    <li class="col-12 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/fitnes-1.png" alt="Йога">
+                            <h5 class="b-slider__card_title class-icon class-yoga">Йога</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <span class="b-slider__card_count">350 занятий</span>
+                        </a>
+                    </li>
+                    <li class="col-12 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/fitnes-1.png" alt="Фитнес">
+                            <h5 class="b-slider__card_title class-icon class-fitness">Фитнес</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <span class="b-slider__card_count">350 занятий</span>
+                        </a>
+                    </li>
+                    </li>
+                    <li class="col-12 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/fitnes-1.png" alt="Фитнес">
+                            <h5 class="b-slider__card_title class-icon class-fitness">Фитнес</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <span class="b-slider__card_count">350 занятий</span>
+                        </a>
+                    </li>
+                    </li>
+                    <li class="col-12 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/fitnes-1.png" alt="Фитнес">
+                            <h5 class="b-slider__card_title class-icon class-fitness">Фитнес</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <span class="b-slider__card_count">350 занятий</span>
+                        </a>
+                    </li>
+                    </li>
+                    <li class="col-12 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/fitnes-1.png" alt="Фитнес">
+                            <h5 class="b-slider__card_title class-icon class-fitness">Фитнес</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <span class="b-slider__card_count">350 занятий</span>
+                        </a>
+                    </li>
+                    </li>
+                    <li class="col-12 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/fitnes-1.png" alt="Фитнес">
+                            <h5 class="b-slider__card_title class-icon class-fitness">Фитнес</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <span class="b-slider__card_count">350 занятий</span>
+                        </a>
+                    </li>
+                    </li>
+                    <li class="col-12 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/fitnes-1.png" alt="Фитнес">
+                            <h5 class="b-slider__card_title class-icon class-fitness">Фитнес</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <span class="b-slider__card_count">350 занятий</span>
+                        </a>
+                    </li>
+                    </li>
+
+                    <li class="col-12 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/fitnes-1.png" alt="Фитнес">
+                            <h5 class="b-slider__card_title class-icon class-fitness">Фитнес</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <span class="b-slider__card_count">350 занятий</span>
+                        </a>
+                    </li>
+                    </li>
+                    <li class="col-12 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/fitnes-1.png" alt="Плавание">
+                            <h5 class="b-slider__card_title class-icon class-swim">Плавание</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <span class="b-slider__card_count">350 занятий</span>
+                        </a>
+                    </li>
+                    <li class="col-12 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/fitnes-1.png" alt="Танцы">
+                            <h5 class="b-slider__card_title class-icon class-yoga">Танцы</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <span class="b-slider__card_count">350 занятий</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="popular-gyms">
+    <div class="container">
+        <div class="row">
+            <h4 class="col-12 col-md-8 section__title">Популярные клубы в Киеве</h4>
+            <div class="col-12 col-md-4 section__link">
+                <a class="link-arrow-right" href="#">Показать все клубы</a>
+            </div>
+            <div class="col-12 b-slider">
+                <ul id="popular-gyms-slider" class="row  slider-loading b-slider-wrapper pl-0">
+                    <li class="col-6 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/gym-1.png" alt="Йога">
+                            <img class="b-slider__card_logo img-fluid " src="assets/media/img/gym-logo-1.png"
+                                 alt="Студия «SELFCENTER»">
+                            <h5 class="b-slider__card_title class-yoga">Студия «SELFCENTER»</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <p class="b-slider__card_count">
+                                <span class="rating-star" data-rating="1"></span>
+                                <span class="rating-star" data-rating="2"></span>
+                                <span class="rating-star" data-rating="3"></span>
+                                <span class="rating-star" data-rating="4"></span>
+                                <span class="rating-star" data-rating="5"></span>
+                                <span class="rating-average">4.6</span>
+                                <span class="rating-user-votes">(24)</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="col-6 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/gym-1.png" alt="Йога">
+                            <img class="b-slider__card_logo img-fluid " src="assets/media/img/gym-logo-1.png"
+                                 alt="Студия «SELFCENTER»">
+                            <h5 class="b-slider__card_title class-yoga">Студия «SELFCENTER»</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <p class="b-slider__card_count">
+                                <span class="rating-star" data-rating="1"></span>
+                                <span class="rating-star" data-rating="2"></span>
+                                <span class="rating-star" data-rating="3"></span>
+                                <span class="rating-star" data-rating="4"></span>
+                                <span class="rating-star" data-rating="5"></span>
+                                <span class="rating-average">4.6</span>
+                                <span class="rating-user-votes">(24)</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="col-6 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/gym-1.png" alt="Йога">
+                            <img class="b-slider__card_logo img-fluid " src="assets/media/img/gym-logo-1.png"
+                                 alt="Студия «SELFCENTER»">
+                            <h5 class="b-slider__card_title class-yoga">Студия «SELFCENTER»</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <p class="b-slider__card_count">
+                                <span class="rating-star" data-rating="1"></span>
+                                <span class="rating-star" data-rating="2"></span>
+                                <span class="rating-star" data-rating="3"></span>
+                                <span class="rating-star" data-rating="4"></span>
+                                <span class="rating-star" data-rating="5"></span>
+                                <span class="rating-average">4.6</span>
+                                <span class="rating-user-votes">(24)</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="col-6 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/gym-1.png" alt="Йога">
+                            <img class="b-slider__card_logo img-fluid " src="assets/media/img/gym-logo-1.png"
+                                 alt="Студия «SELFCENTER»">
+                            <h5 class="b-slider__card_title class-yoga">Студия «SELFCENTER»</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <p class="b-slider__card_count">
+                                <span class="rating-star" data-rating="1"></span>
+                                <span class="rating-star" data-rating="2"></span>
+                                <span class="rating-star" data-rating="3"></span>
+                                <span class="rating-star" data-rating="4"></span>
+                                <span class="rating-star" data-rating="5"></span>
+                                <span class="rating-average">4.6</span>
+                                <span class="rating-user-votes">(24)</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="col-6 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/gym-1.png" alt="Йога">
+                            <img class="b-slider__card_logo img-fluid " src="assets/media/img/gym-logo-1.png"
+                                 alt="Студия «SELFCENTER»">
+                            <h5 class="b-slider__card_title class-yoga">Студия «SELFCENTER»</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <p class="b-slider__card_count">
+                                <span class="rating-star" data-rating="1"></span>
+                                <span class="rating-star" data-rating="2"></span>
+                                <span class="rating-star" data-rating="3"></span>
+                                <span class="rating-star" data-rating="4"></span>
+                                <span class="rating-star" data-rating="5"></span>
+                                <span class="rating-average">4.6</span>
+                                <span class="rating-user-votes">(24)</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="col-6 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/gym-1.png" alt="Йога">
+                            <img class="b-slider__card_logo img-fluid " src="assets/media/img/gym-logo-1.png"
+                                 alt="Студия «SELFCENTER»">
+                            <h5 class="b-slider__card_title class-yoga">Студия «SELFCENTER»</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <p class="b-slider__card_count">
+                                <span class="rating-star" data-rating="1"></span>
+                                <span class="rating-star" data-rating="2"></span>
+                                <span class="rating-star" data-rating="3"></span>
+                                <span class="rating-star" data-rating="4"></span>
+                                <span class="rating-star" data-rating="5"></span>
+                                <span class="rating-average">4.6</span>
+                                <span class="rating-user-votes">(24)</span>
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="col-6 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/gym-1.png" alt="Йога">
+                            <img class="b-slider__card_logo img-fluid " src="assets/media/img/gym-logo-1.png"
+                                 alt="Студия «SELFCENTER»">
+                            <h5 class="b-slider__card_title class-yoga">Студия «SELFCENTER»</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <p class="b-slider__card_count">
+                                <span class="rating-star" data-rating="1"></span>
+                                <span class="rating-star" data-rating="2"></span>
+                                <span class="rating-star" data-rating="3"></span>
+                                <span class="rating-star" data-rating="4"></span>
+                                <span class="rating-star" data-rating="5"></span>
+                                <span class="rating-average">4.6</span>
+                                <span class="rating-user-votes">(24)</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="col-6 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/gym-2.png" alt="Фитнес">
+                            <img class="b-slider__card_logo img-fluid " src="assets/media/img/gym-logo-1.png"
+                                 alt="Crossfit BANDA">
+                            <h5 class="b-slider__card_title class-fitness">Crossfit BANDA</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <p class="b-slider__card_count">
+                                <span class="rating-star" data-rating="1"></span>
+                                <span class="rating-star" data-rating="2"></span>
+                                <span class="rating-star" data-rating="3"></span>
+                                <span class="rating-star" data-rating="4"></span>
+                                <span class="rating-star" data-rating="5"></span>
+                                <span class="rating-average">4.6</span>
+                                <span class="rating-user-votes">(24)</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="col-6 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/gym-3.png" alt="Плавание">
+                            <img class="b-slider__card_logo img-fluid " src="assets/media/img/gym-logo-1.png"
+                                 alt="Студия «SELFCENTER»">
+                            <h5 class="b-slider__card_title class-swim">Студия «SELFCENTER»</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <p class="b-slider__card_count">
+                                <span class="rating-star" data-rating="1"></span>
+                                <span class="rating-star" data-rating="2"></span>
+                                <span class="rating-star" data-rating="3"></span>
+                                <span class="rating-star" data-rating="4"></span>
+                                <span class="rating-star" data-rating="5"></span>
+                                <span class="rating-average">4.6</span>
+                                <span class="rating-user-votes">(24)</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="col-6 col-sm-4 col-lg-3 b-slider__item  align-items-stretch">
+                        <a href="#" class="b-slider__card ">
+                            <img class="img-fluid" src="assets/media/img/gym-4.png" alt="Crossfit BANDA">
+                            <img class="b-slider__card_logo img-fluid " src="assets/media/img/gym-logo-1.png"
+                                 alt="Студия «SELFCENTER»">
+                            <h5 class="b-slider__card_title class-yoga">Crossfit BANDA</h5>
+                            <p class="b-slider__card_description">Хатха йога, Аштанга-Виньяса йога, Power йога, Инь-йога
+                                и еще 5…</p>
+                            <p class="b-slider__card_count">
+                                <span class="rating-star" data-rating="1"></span>
+                                <span class="rating-star" data-rating="2"></span>
+                                <span class="rating-star" data-rating="3"></span>
+                                <span class="rating-star" data-rating="4"></span>
+                                <span class="rating-star" data-rating="5"></span>
+                                <span class="rating-average">4.6</span>
+                                <span class="rating-user-votes">(24)</span>
+                            </p>
+                        </a>
+                    </li>
+
+                </ul>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+<section id="why-gofit" class="b-compare">
+    <h3 class="col-12 text-center b-compare__title">Почему люди выбирают GoFit?</h3>
+    <div class="b-compare__wrapper">
+        <div class=" b-compare__header-fix">
+            <div class="container">
+                <div class="row justify-content-center ">
+                    <div class="col-6 col-sm-5 col-md-6 text-center ">
+                        <div class="logo-container">
+                            <p class="b-compare__logo-sm  another-logo-sm">ОБЫЧНЫЙ <br/>АБОНЕМЕНТ</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-5 col-md-6 text-center">
+                        <div class="logo-container ">
+                            <p class="b-compare__logo-sm gofit-logo-sm logo-block"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span id="simbol-vs">VS</span>
+        <div class=" b-compare__header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6 text-center ">
+                        <div class="logo-container">
+                            <figure class="b-compare__logo another-gym"><span>ОБЫЧНЫЙ <br/>АБОНЕМЕНТ</span></figure>
+                        </div>
+                    </div>
+                    <div class="col-6 text-center">
+                        <div class="logo-container ">
+                            <a href="/subscription.html" class="b-compare__logo gofit-logo"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="b-compare__item">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <p class=" col-6 col-sm-5 col-md-6 text-center b-compare__item_text b-compare__another">
+                        <b>20</b><span>Клубов или студий</span>
+                    </p>
+                    <p class="col-6 col-sm-5 col-md-6 text-center  b-compare__item_text b-compare__gofit">
+                        <b>538</b><span>Клубов, студий и центров</span>
+                    </p>
+                    <p class="b-compare__mobile_text hidden-sm-up"> Клубов или студий</p>
+                </div>
+            </div>
+        </div>
+        <div class="b-compare__item">
+            <div class="container">
+                <div class="row  justify-content-center">
+                    <p class="col-6 col-sm-5 col-md-6 text-center b-compare__item_text b-compare__another">
+                        <b>35</b><span>Типов занятий</span></p>
+                    <p class="col-6 col-sm-5 col-md-6 text-center  b-compare__item_text b-compare__gofit types">
+                        <b>350</b><span>Типов занятий</span></p>
+                    <p class="b-compare__mobile_text hidden-sm-up">Типов занятий</p>
+                </div>
+            </div>
+        </div>
+        <div class="b-compare__item">
+            <div class="container">
+                <div class="row  justify-content-center">
+                    <p class="col-6 col-sm-5 col-md-6 text-center b-compare__item_text b-compare__another">
+                        <b>14</b><span>Дней заморозки абонемента</span>
+                    </p>
+                    <p class="col-6 col-sm-5 col-md-6 text-center  b-compare__item_text b-compare__gofit">
+                        <b>60</b><span>Дней заморозки абонемента</span>
+                    </p>
+                    <p class="b-compare__mobile_text hidden-sm-up"> Дней заморозки </p>
+                </div>
+            </div>
+        </div>
+        <div class="b-compare__item compare-city-count">
+            <div class="container">
+                <div class="row  justify-content-center">
+                    <div class="col-6 col-sm-5 col-md-6 text-center b-compare__item_text b-compare__another">
+                        <p class="logo-container">
+                            <b>1</b><span>Город доступный для занятий</span>
+                        </p>
+                    </div>
+                    <div class="col-6 col-sm-5 col-md-6 text-center  b-compare__item_text b-compare__gofit">
+                        <p class="logo-container">
+                            <b>6</b><span>Доступных городов для занятий</span>
+                        </p>
+                    </div>
+                    <p class="b-compare__mobile_text hidden-sm-up"> Городов в сети </p>
+                </div>
+            </div>
+        </div>
+        <div class="b-compare__item price-item action-item">
+            <div class="container">
+                <div class="row  justify-content-center">
+                    <p class="col-6 col-sm-5 col-md-6 text-center b-compare__item_text b-compare__another">
+                        <b>2500 <span> грн.</span></b>
+                        <span class="md-price">Стоимость обычного абонемента</span>
+                        <span class="sm-price">Цена абонемента</span>
+                    </p>
+                    <p class="col-6 col-sm-5 col-md-6 text-center  b-compare__item_text b-compare__gofit">
+                        <b>599 <span>грн.</span></b>
+                        <span class="md-price">Стоимость абонемента GoFit</span>
+                        <span class="sm-price">Цена абонемента</span>
+                    </p>
+                </div>
+                <div class="row  last-item  justify-content-center">
+                    <p class="col-12 col-sm-5 col-md-6  text-center b-compare__item_text b-compare__another">
+                        <a class="btn__link btn__link-default" href="#">Продолжить переплачивать</a>
+                    </p>
+                    <p class="col-12 col-sm-5 col-md-6  text-center  b-compare__item_text b-compare__gofit">
+                        <a class="btn__link btn__link-active" href="#">Выбрать абонемент GoFit</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="free-class">
+    <div class="container">
+        <div class="row free-class__height">
+            <div class="col-md-12 col-lg-6  d-flex flex-column justify-content-center  free-class__order">
+                <div class="free-class__content section__content_width">
+                    <h3 class="free-class__title">Еще сомневаетесь?</h3>
+                    <p class="free-class__excerpt">Зарегистрируйтесь и получите бесплатное занятие прямо сейчас!</p>
+                    <a class=" free-class__btn btn__yellow" href="">Получить бесплатное занятие</a>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6  free-class__banner">
+                <img src="/assets/media/img/new-girl.png" alt="" class="free-class__girl">
+            </div>
+        </div>
+    </div>
+</section>
+<section id="mobile-app" class="mobile-app">
+    <div class="container">
+        <div class="row mobile-app__height">
+            <div class="col-12 col-sm-6 d-flex flex-column justify-content-end justify-content-lg-center">
+                <div class="mobile-app__header">
+                    <h3 class="mobile-app__title">Скоро в вашем cмартфоне</h3>
+                    <p class="mobile-app__excerpt">Находить клубы поблизости теперь просто и удобно.
+                       <span> Скачайте мобильное приложение GoFit прямо сейчас
+                           и получите пробное занятие бесплатно!</span>
+                    </p>
+                </div>
+                <div class="mobile-app__content section__content_width">
+                    <a class="mobile-app__btn g-market not-active" href="#">
+                    </a>
+                    <a class="mobile-app__btn app-store not-active" href="#">
+                    </a>
+                    <p class="mobile-app__msg"><span>Сообщить когда станет доступно</span></p>
+                    <form id="mobileAppForm" class="mobile-app__form form-inline">
+                        <div class="input-group">
+                            <input type="email" class="form-control form-input" id="inlineFormInputGroup"
+                                   placeholder="example@mail.com">
+                            <button type='button' class="input-group-addon mobile-app__form-submit form-submit"
+                                    data-content="email"></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 d-flex flex-column justify-content-end align-items-center">
+                <img class="mobile-app__banner" src="/assets/media/img/phone-app.png" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+<section id="call-back" class="b-call-back">
+    <div class="container">
+        <div class="row b-call-back__height">
+            <div class="col-12 d-flex flex-column justify-content-center">
+                <div class="b-call-back__content">
+                    <h3 class="b-call-back__title">Остались вопросы?</h3>
+                    <p class="b-call-back__excerpt">Оставьте свой номер телефона, и мы перезвоним вам в течении 5
+                        минут!</p>
+                    <form class="form-inline justify-content-center">
+                        <div class="input-group">
+                            <input type="tel" class="form-control form-input" id="call-back-input"
+                                   placeholder="+38 (___) ___-__-__">
+                            <button type="button" class="input-group-addon b-call-back__form-submit form-submit"
+                                    data-content="phone"></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="gf-modal-sm" tabindex="-1" role="dialog" aria-labelledby="GoF" aria-hidden="true">
+    <div class="modal-dialog gf-modal__dialog " role="document">
+        <div class="gf-modal__header">
+            <button type="button" class="gf-modal__close gf-modal__sm_close"></button>
+        </div>
+        <div class="gf-modal__content ">
+            <div class="gf-modal__text">
+                <p class="gf-modal__text_title"></p>
+                <img class="gf-modal__text_icon" src="/assets/media/img/modal-letter.svg" alt="icon">
+                <p class="gf-modal__text_desc"></p>
+                <a href="/" class="gf-modal__text_btn">На главную</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="GoFit" aria-hidden="true">
+    <div class="modal-dialog gf-modal__dialog video-dialog" role="document">
+        <div class="gf-modal__header">
+            <button type="button" class="gf-modal__close"></button>
+        </div>
+        <div class="gf-modal__content video-modal-content">
+        </div>
+    </div>
+</div>
+</div>
+
+//= ./parts/footer.html
